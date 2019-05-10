@@ -5,6 +5,11 @@ import React, {Component} from 'react';
 //import { Link } from 'react-router-dom';
 import { Row,Form, Col, Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
+import {connect} from  'react-redux';
+import {register} from '../../redux/actions'
+import { Redirect } from 'react-router-dom'
+
+
 
 class Register extends Component{
     constructor(props){
@@ -13,20 +18,14 @@ class Register extends Component{
             username : '',
             email : '',
             password : '',
-            confirm_password : ''
+            confirm_password : '',
         }
     }
+
     handleRegister = (event) => {
-        event.preventDefault()
-        console.log(this.state)
-        this.setState({
-            username : '',
-            email : '',
-            password : '',
-            confirm_password : ''
-        })
-        console.log(this.state);
-        
+        this.props.register(this.state)
+        console.log('this.state:  ', this.state)
+        console.log('this.state.user:  ', this.props.user)
     }
 
     //箭头函数表达式
@@ -43,11 +42,19 @@ class Register extends Component{
         this.props.history.replace('/login')
      }
 
-    render(){
+    render() {
+        const {msg, redirectTo} = this.props.user
+        // 如果redirectTo有值, 就需要重定向到指定的路由
+        if(redirectTo) {
+            console.log(redirectTo);
+        return <Redirect to = {redirectTo} />
+        }
+
         return(
             <Container >
                 <div className="mx-auto col-6 border border-dark my-3" >
                     <h1 className="text-center"> Register </h1>
+                    {msg ? <p className='error-msg'>{msg}</p> : null}
                     <Form className="my-3">
                         <Form.Group as={Row} controlId="formPlaintextName">
                             <Form.Label column sm="4">
@@ -102,7 +109,7 @@ class Register extends Component{
                             </Col>
                         </Form.Group>
                             <Button variant="primary" size="lg" block
-                            onClick={this.handleRegister} >
+                            onClick= {this.handleRegister} >
                                 Register
                             </Button>
                         <br/>
@@ -121,4 +128,7 @@ class Register extends Component{
 }
 
 
-export default Register
+export default connect(
+    state => ({ user : state.user}),
+    {register} //-> the asynchronous action for this component
+ )(Register)

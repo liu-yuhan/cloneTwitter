@@ -8,12 +8,16 @@ const bcrypt = require('bcrypt');
 const saltRounds= 10;
 const UserModel = require("../db/db_model").UserModel;
 
+/* 
+function register. if email existed, return a msg, to tell user email has been used,
+otherwise, stock data in collection user.
+*/ 
 router.post('/register', function(req, res) {
-  const {email, username, password} = req.body
+  const {email, username, password,} = req.body
   UserModel.findOne({"email" :  email},function(err,user){
     if (err) throw err;
     if(user){
-      res.send("Email has been registed, please verify")
+      res.send({code:1,msg:"Email has been registed, please verify"})
       res.end()
     }    
     else{
@@ -28,7 +32,7 @@ router.post('/register', function(req, res) {
               })
               user.save(function(err,newUser){
                     res.cookie('userid', user._id, {maxAge: 1000*60*60*24*7})
-                    res.send({code: 0, data: {_id: user._id, username,email, password}})  
+                    res.send({code: 0, data: {_id: user._id, username,email}})  
                     console.log(user);
               })
        //})
@@ -39,26 +43,25 @@ router.post('/register', function(req, res) {
 
 
 router.post('/login', function (req, res ) {
-    const {email,password}  = req.body
+    const {email , password}  = req.body
+    console.log({email,password} )
+    
     UserModel.findOne(
         {"email" : email},
         function(err, user){
             if(err) throw err
             if(!user){
-                res.send("Login failed, please verify email and password" )
-                res.end
+                res.send({code:1, msg:'Email not found Login failed, please verify email and password' })
                 }
             else{
                 console.log(user)
                 bcrypt.compare(password, user.password, function(err,result){
                     if (err)  throw err
                     if (!result){
-                      res.send("Login failed, please verify email and password" )
-                      res.end
+                      res.send({code:1,msg:'password not correct Login failed, please verify email and password'} )
                     }
                     else{
-                      res.send("Login seccessful, Welcome")
-                      res.redirect('/');
+                      res.send({code:0, data:'Login seccessful, Welcome'})
                     }
                 })
                 }

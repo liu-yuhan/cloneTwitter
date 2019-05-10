@@ -19,10 +19,13 @@ connection.on(
 const userSchema =new Schema({
     username : {type : String, required : true},
     email  : {type : String , required:true, index: { unique: true }  },
-    password : {type:String, required:true }
+    password : {type:String, required:true },
+    photo: {type: String}
 })
 
 //mongoose.model("someNickname of this model", "the Schema used")
 const UserModel = mongoose.model('user', userSchema)
-// 2.3. 向外暴露 Model
+
+//Exports Model. 
+
 exports.UserModel = UserModel

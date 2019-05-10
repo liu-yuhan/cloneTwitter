@@ -2,8 +2,12 @@
 Components for "/login"
 */
 import React, {Component} from 'react'
-import { Row,Form, Col, Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
+import { Row,Form, Col, Button } from 'react-bootstrap'
+import Container from 'react-bootstrap/Container'
+import {connect} from 'react-redux'
+import {login} from '../../redux/actions'
+import { Redirect } from 'react-router-dom'
+
 
 class Login extends Component{
     
@@ -23,7 +27,9 @@ class Login extends Component{
 
     handleLogin = (event)=>{
         event.preventDefault()
-        console.log(this.state)    
+        this.props.login(this.state)
+        console.log('this.state:  ', this.state)
+        console.log('this.state.user:  ', this.props.user)
     }
 
     toRegister = ()=>{
@@ -31,10 +37,17 @@ class Login extends Component{
     }
 
     render(){
+        const {msg,redirectTo} = this.props.user
+        console.log(redirectTo)
+        if(redirectTo) {
+            console.log(redirectTo);
+        return <Redirect to = '/' />
+        }
         return(
             <Container >
                 <div className="mx-auto col-4 border border-dark my-3" >
                     <h1 className="text-center"> Login </h1>
+                    {msg ? <p className='error-msg'>{msg}</p> : null}
                     <Form className="my-3">
                         <Form.Group as={Row} controlId="formPlaintextEmail">
                             <Form.Label column sm="4">
@@ -82,4 +95,7 @@ class Login extends Component{
         )}
 }
 
-export default Login
+export default connect(
+    state => ({user: state.user}),
+    { login }
+)( Login )
