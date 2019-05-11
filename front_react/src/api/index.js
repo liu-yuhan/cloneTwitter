@@ -12,4 +12,7 @@ export const reqRegister = (user) => ajax('/register', user, 'POST')
 export const reqLogin = ({ email ,password }) => ajax('/login', {email , password}, 'POST' )
 
 //api request for user update profile
-export const reqUserUpdate = (user) => ajax('/update', user, 'POST')
+export const reqUserUpdate = (user) => ajax('/myspace/update', user, 'POST')
+
+//api request for get data to userspace '/uspace'
+export const reqMyspace = ()=>ajax('/myspace',  ) // jie kou qing qiu han shu

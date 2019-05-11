@@ -9,19 +9,22 @@ import store from './redux/store';
 import Login from './containers/login/login';
 import Register from './containers/register/register';
 import Main from './containers/main/main'
-
+import Myspace from './containers/myspace/myspace'
+import Update from './containers/myspace/update'
 
 ReactDOM.render(( 
         <Provider store = {store} >
             <Router>
                 <Navbar bg="dark" variant="dark" fixed="bottom">                       
                     <NavLink  className="col-4 text-center" to="/" >Blogs</NavLink>                  
-                    <NavLink  className="col-4 text-center" to="/MySpace" >My Space</NavLink>                               
+                    <NavLink  className="col-4 text-center" to="/mySpace" >My Space</NavLink>                               
                     <NavLink  className="col-4 text-center" to="/Chat" >Chat</NavLink>
                 </Navbar>
                 <Switch>
                 <Route path = '/register' component={Register} ></Route>
                 <Route path = '/login' component={Login} ></Route>
+                <Route path = '/myspace' component={Myspace}></Route>
+                <Route path = '/update' component={Update}></Route>
                 <Route component={Main}></Route>
                 </Switch>
             </Router>        

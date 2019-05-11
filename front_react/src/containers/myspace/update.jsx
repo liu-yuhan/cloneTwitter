@@ -6,24 +6,24 @@ import React, {Component} from 'react';
 import { Row,Form, Col, Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import {connect} from  'react-redux';
-import {register} from '../../redux/actions'
-import { Redirect } from 'react-router-dom'
+import {update} from '../../redux/actions'
 
 
-class Register extends Component{
+class Update extends Component{
     constructor(props){
         super(props);
         this.state={
             username : '',
-            email : '',
-            password : '',
-            confirm_password : '',
+            email : ' ',
+            photo : ' ',
+            password:' ',
+            confirm_password:'',
+            summary:' '
         }
     }
 
-    handleRegister = (event) => {
-        this.props.register(this.state)
-       
+    handleUpdate = (event) => {
+        this.props.update(this.state)
     }
 
     //箭头函数表达式
@@ -41,19 +41,26 @@ class Register extends Component{
      }
 
     render() {
-        const {msg, redirectTo} = this.props.user
-        // 如果redirectTo有值, 就需要重定向到指定的路由
-        if(redirectTo) {
-            console.log(redirectTo);
-        return <Redirect to = {redirectTo} />
-        }
-
+        const {msg} = this.props.update
         return(
             <Container >
                 <div className="mx-auto col-6 border border-dark my-3" >
-                    <h1 className="text-center"> Register </h1>
+                    <h1 className="text-center"> Update Profile </h1>
                     {msg ? <p className='error-msg'>{msg}</p> : null}
                     <Form className="my-3">
+                        <Form.Group as={Row} controlId="formPlaintextName">
+                                <Form.Label column sm="4">
+                                   Photo
+                                </Form.Label>
+                                <Col sm="8">
+                                    <Form.Control
+                                    name = "photo"
+                                    type='file'
+                                    placeholder="Name"
+                                    onChange={this.handleChange.bind(this)}
+                                    />
+                                </Col>
+                            </Form.Group>
                         <Form.Group as={Row} controlId="formPlaintextName">
                             <Form.Label column sm="4">
                                 Name
@@ -107,8 +114,8 @@ class Register extends Component{
                             </Col>
                         </Form.Group>
                             <Button variant="primary" size="lg" block
-                            onClick= {this.handleRegister} >
-                                Register
+                            onClick= {this.handleUpdate} >
+                                Update
                             </Button>
                         <br/>
                         <Row className="mx-auto">
@@ -126,7 +133,8 @@ class Register extends Component{
 }
 
 
+
 export default connect(
     state => ({ user : state.user}),
-    {register} //-> the asynchronous action for this component
- )(Register)
+    {update} //-> the asynchronous action for this component
+ )(Update)

@@ -20,7 +20,8 @@ const userSchema =new Schema({
     username : {type : String, required : true},
     email  : {type : String , required:true, index: { unique: true }  },
     password : {type:String, required:true },
-    photo: {type: String}
+    photo: {type: String},
+    summary: {type: String}
 })
 
 //mongoose.model("someNickname of this model", "the Schema used")

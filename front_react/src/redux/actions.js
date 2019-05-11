@@ -1,18 +1,19 @@
-import {reqRegister,reqLogin} from '../api/index'
-import {AUTH_SUCCESS,ERROR_MSG } from './action-type'
+import {reqRegister,reqLogin,reqUserUpdate, reqMyspace} from '../api/index'
+import {AUTH_SUCCESS,ERROR_MSG,RECEIVE_USER,RESET_USER } from './action-type'
 
 //every action type should correspond a synchronize function
 
-/*
-synchronize function for AUTH_SUCCESS
-*/
+//synchronize function for AUTH_SUCCESS
 const authSuccess = (user) =>({type:AUTH_SUCCESS, data:user})
 
-/*
-synchronize function for ERROR_MSG
-*/
+//synchronize function for ERROR_MSG
 const errorMsg = (msg) => ({type:ERROR_MSG,data:msg })
 
+//synchronize function to receive user information
+const receiveUser = (user) => ({type: RECEIVE_USER, data:user})
+
+//synchronize function to 
+const resetUser = (msg) => ({type: RESET_USER, data: msg})
 
 /* 
 asynchronous  action for register
@@ -26,7 +27,6 @@ export  const  register = (user) => {
         //form check in front-end
         return errorMsg("Confirm_password isn't identical to password")
     }
-        
     return async dispatch =>{
         //send asynchronous register request
         //once we use keyword "await", this function must add keyword "async"
@@ -71,3 +71,36 @@ export const login = (user)=>{
         }
     }
 }
+
+
+//asynchronous  action for Uspace get Info
+export const myspace = () => {
+    console.log("myspace action in" )
+    return async dispatch =>{
+        const response = await reqMyspace()
+        const result = response.data
+        if(result.code===0){
+            dispatch(receiveUser(result.data))
+        }else{
+            dispatch(resetUser(result.msg))
+        }
+    }
+}
+
+
+export const update = (user) =>{
+    return async dispatch =>{
+
+        const response =await reqUserUpdate(user)
+        const result = response.data
+        if(result.code===0 ){
+            dispatch(receiveUser(result.data) )
+        }else{
+            dispatch(resetUser(result.msg))
+        }
+    }
+}
+
+  
+
+

@@ -41,7 +41,7 @@ class Login extends Component{
         console.log(redirectTo)
         if(redirectTo) {
             console.log(redirectTo);
-        return <Redirect to = '/' />
+        return <Redirect to = '/uspace' />
         }
         return(
             <Container >
