@@ -6,6 +6,7 @@
     const bcrypt = require('bcrypt');
     const saltRounds= 10;
     const UserModel = require("../db/db_model").UserModel;
+    const TwitModel = require("../db/db_model").TwitModel;
 
     /* 
     function register. if email existed, return a msg, to tell user email has been used,
@@ -77,28 +78,64 @@
     router.get('/myspace',function(req,res){   
         console.log('myspace connected');
         const userid = req.cookies.userid
+        console.log(typeof(userid));
+        console.log(userid);
+        
         if (!userid){
             res.send({
                 code:1, msg:'please Login first'
             })
         }
-          UserModel.findOne({'_id':userid}, function(err,user){
+          UserModel.findOne({'_id':[userid]}, function(err,user){
           if (err) throw err
           if (!user) {
             res.send({code:1, msg:'wired, user not found'  })
-          }else{
-            res.send({
-                code:0, data:{
-                  photo: user.photo,
-                  email : user.email,
-                  username: user.username, 
-                  summary : user.summary
-                }
-            })
+          }else{ 
+              TwitModel.find({'userId':[userid]},function(err,allTwits){
+                console.log(userid)
+                  if(err) throw err
+                  res.send({
+                    code:0, data:{
+                      photo: user.photo,
+                      email : user.email,
+                      username: user.username, 
+                      summary : user.summary,
+                      twits:allTwits
+                    }
+                })
+            })      
           }
         })
     })
 
+    router.post('/myspace',function(req,res){   
+      console.log('post myspace connected')
+      const userId = req.cookies.userid
+      if (!userId){
+          res.send({
+              code:1, msg:'please Login first'
+          })
+      }
+      console.log(req.body)
+      const {content,postTime} = req.body
+
+     /* if( userId !== userid_cookie ){
+        res.send({
+          code:1,msg:'impossible!!! userid !== userid_cookie ?! '
+        }) 
+      }*/
+      const twit = new TwitModel({
+        userId: userId,
+        content:content,
+        postTime:postTime
+      })
+      twit.save(function(err,NewTwit){
+        if(err) throw err
+        res.send({
+          code:0, data:'twit is sent '
+        })
+      })
+  })
   
 
 // router.post("/test", function(req, res){

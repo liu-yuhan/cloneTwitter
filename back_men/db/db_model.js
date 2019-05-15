@@ -28,5 +28,13 @@ const userSchema =new Schema({
 const UserModel = mongoose.model('user', userSchema)
 
 //Exports Model. 
-
 exports.UserModel = UserModel
+
+const twitSchema = new Schema({
+    userId:{type:String, require:true },
+    content:{type:String, require:true },
+    postTime:{type:String,require:true }
+})
+
+const TwitModel = mongoose.model('twit',twitSchema)
+exports.TwitModel =TwitModel

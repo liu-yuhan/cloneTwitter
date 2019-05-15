@@ -12,7 +12,7 @@ import Main from './containers/main/main'
 import Myspace from './containers/myspace/myspace'
 import Update from './containers/myspace/update'
 
-ReactDOM.render(( 
+ReactDOM.render((
         <Provider store = {store} >
             <Router>
                 <Navbar bg="dark" variant="dark" fixed="bottom">                       
@@ -29,7 +29,6 @@ ReactDOM.render((
                 </Switch>
             </Router>        
         </Provider>
-        
       ), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -7,7 +7,7 @@ import { Row,Form, Col, Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import {connect} from  'react-redux';
 import {update} from '../../redux/actions'
-
+import { Redirect } from 'react-router-dom'
 
 class Update extends Component{
     constructor(props){
@@ -41,7 +41,10 @@ class Update extends Component{
      }
 
     render() {
-        const {msg} = this.props.update
+        const {msg,data} = this.props.update
+        if(msg){
+            return <Redirect to = '/myspace' />
+        }
         return(
             <Container >
                 <div className="mx-auto col-6 border border-dark my-3" >
@@ -85,6 +88,17 @@ class Update extends Component{
                                 placeholder="email@example.com"
                                 onChange={this.handleChange.bind(this)}
                                 />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="formPlaintextSummary">
+                            <Form.Label column sm="4">
+                            Summary:
+                            </Form.Label>
+                            <Col sm="8">
+                            <Form.Control name='summary' 
+                            as="textarea" 
+                            rows="3" 
+                            onChange={this.handleChange.bind(this)} />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formPlaintextPassword">

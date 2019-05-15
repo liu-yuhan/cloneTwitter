@@ -16,3 +16,5 @@ export const reqUserUpdate = (user) => ajax('/myspace/update', user, 'POST')
 
 //api request for get data to userspace '/uspace'
 export const reqMyspace = ()=>ajax('/myspace',  ) // jie kou qing qiu han shu
+
+export const reqMyspace_twit = (twit)=>ajax('/myspace',twit,'POST')

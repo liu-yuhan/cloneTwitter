@@ -1,5 +1,15 @@
-import {reqRegister,reqLogin,reqUserUpdate, reqMyspace} from '../api/index'
-import {AUTH_SUCCESS,ERROR_MSG,RECEIVE_USER,RESET_USER } from './action-type'
+import {reqRegister,
+        reqLogin,
+        reqUserUpdate, 
+        reqMyspace,
+        reqMyspace_twit} 
+from '../api/index'
+import {AUTH_SUCCESS,
+        ERROR_MSG,
+        RECEIVE_USER,
+        RESET_USER,
+        SEND_TWIT} 
+from './action-type'
 
 //every action type should correspond a synchronize function
 
@@ -15,6 +25,8 @@ const receiveUser = (user) => ({type: RECEIVE_USER, data:user})
 //synchronize function to 
 const resetUser = (msg) => ({type: RESET_USER, data: msg})
 
+//receive request to post new blog ,prepare to send to back
+const sendTwit = (twit) =>({type:SEND_TWIT,data:twit })
 /* 
 asynchronous  action for register
 */
@@ -87,14 +99,26 @@ export const myspace = () => {
     }
 }
 
+export const newtwit = (twit)=>{
+    console.log("myspace twit ready")
+    return async dispatch =>{
+        const response =await reqMyspace_twit(twit)
+        const result =  response.data
+        if(result.data===0){
+            dispatch(sendTwit(result.data))
+        }else{
+            dispatch(errorMsg(result.msg))
+        }
+    }
+}
+
 
 export const update = (user) =>{
     return async dispatch =>{
-
         const response =await reqUserUpdate(user)
         const result = response.data
         if(result.code===0 ){
-            dispatch(receiveUser(result.data) )
+            dispatch(receiveUser(result.data)) //backend receive data successful
         }else{
             dispatch(resetUser(result.msg))
         }
